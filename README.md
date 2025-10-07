@@ -48,7 +48,7 @@ If you wish to run your own backend:
 2.  **Update the API endpoint** in the inline script in `index.html` to point to your local or self-hosted API URL:
 
     ```javascript
-    const apiUrl = `YOUR_BACKEND_API_URL/get_player_personal_show?server=${server.toLowerCase()}&uid=${uid}`;
+    const apiUrl = `https://freefire-api-six.vercel.app/get_player_personal_show?server=${server.toLowerCase()}&uid=${uid}`;
     ```
 
 ## 🛠️ Technologies Used
