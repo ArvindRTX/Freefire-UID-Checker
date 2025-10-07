@@ -29,7 +29,7 @@ To get this frontend running quickly:
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/ArvindRTX/Freefire-UID-Checker.git](https://github.com/YOUR_USERNAME/Freefire-UID-Checker.git)
+    git clone [https://github.com/ArvindRTX/Freefire-UID-Checker.git](https://github.com/ArvindRTX/Freefire-UID-Checker.git)
     cd Freefire-UID-Checker
     ```
 2.  **Open `index.html`:**
