@@ -1,7 +1,7 @@
 # 🔥 Freefire-UID-Checker
 
 ![Free Fire Lookup Screenshot](https://via.placeholder.com/800x450/120A2F/00ffcc?text=Freefire-UID-Checker+Screenshot)
-*Replace this with an actual screenshot of your deployed site!*
+
 
 A dynamic and visually engaging web application designed to help you quickly retrieve essential Free Fire player information. Simply input a player's Unique ID (UID) and their server region, and the app will display their in-game Nickname, Level, Region, and Signature.
 
