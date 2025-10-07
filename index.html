@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Fire Player Lookup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #120A2F; /* Deep violet-blue */
+            --accent-glow: #00ffcc; /* Bright cyan */
+            --text-light: #e0e0e0;
+            --text-subtle: #888;
+            --container-bg: rgba(25, 10, 50, 0.8); /* Semi-transparent dark violet */
+            --border-glow: rgba(0, 255, 204, 0.4);
+            --button-gradient-start: #00e6b8;
+            --button-gradient-end: #00a880;
+            --error-color: #ff4d4d;
+            --warning-color: #ffcc00;
+        }
+
+        body {
+            font-family: 'Share Tech Mono', monospace; /* Techy monospace font */
+            background-color: var(--bg-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--text-light);
+            overflow: hidden; /* Hide scrollbars due to moving background */
+            position: relative;
+        }
+
+        /* Animated Background Elements */
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1; /* Behind content */
+        }
+
+        /* Far background - grid */
+        body::before {
+            background-image:
+                linear-gradient(to right, rgba(0, 255, 204, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 255, 204, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: panBackground 60s linear infinite;
+        }
+
+        /* Close background - particles/stars */
+        body::after {
+            background-image: radial-gradient(circle, var(--accent-glow) 1px, transparent 1px);
+            background-size: 800px 800px; /* Larger to create sparse 'stars' */
+            animation: panBackground 120s linear infinite reverse; /* Slower, reverse direction */
+            opacity: 0.1;
+        }
+
+        @keyframes panBackground {
+            0% { background-position: 0 0; }
+            100% { background-position: -5000px 0; } /* Adjust to create long pan */
+        }
+
+        /* Foreground Glowing Particles */
+        .particle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10; /* Above content */
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background-color: var(--accent-glow);
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatAndFade 5s infinite ease-out;
+            box-shadow: 0 0 8px var(--accent-glow);
+        }
+
+        @keyframes floatAndFade {
+            0% { transform: translate(-50%, 0%); opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0; }
+            100% { transform: translate(-50%, -1000px); opacity: 0; }
+        }
+
+        /* Main Container */
+        .container {
+            background: var(--container-bg);
+            border-radius: 15px;
+            box-shadow: 0 0 50px rgba(0, 255, 204, 0.3);
+            padding: 30px;
+            max-width: 450px;
+            width: 100%;
+            position: relative;
+            z-index: 20; /* Above background and foreground particles */
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            backdrop-filter: blur(8px); /* Frosted glass effect */
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', sans-serif; /* Futuristic bold font */
+            color: var(--accent-glow);
+            font-size: 2.2em;
+            margin-bottom: 8px;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            color: var(--text-subtle);
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        /* Input Group */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: var(--text-light);
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            outline: none;
+            background: rgba(0, 0, 0, 0.4);
+            color: var(--text-light);
+            font-family: 'Share Tech Mono', monospace;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        select:focus, input:focus {
+            border-color: var(--accent-glow);
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.6), inset 0 0 5px rgba(0, 255, 204, 0.3);
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        /* Button */
+        .search-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--button-gradient-start) 0%, var(--button-gradient-end) 100%);
+            color: #1a1a1a; /* Dark text on bright button */
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 15px;
+            box-shadow: 0 5px 20px rgba(0, 255, 204, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .search-btn:hover:not(:disabled) {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 8px 25px rgba(0, 255, 204, 0.6);
+            filter: brightness(1.1);
+        }
+
+        .search-btn:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(0, 255, 204, 0.4);
+            filter: brightness(0.9);
+        }
+
+        .search-btn:disabled {
+            background: #444;
+            color: #888;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 25px;
+            color: var(--accent-glow);
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid rgba(0, 255, 204, 0.2);
+            border-top: 3px solid var(--accent-glow);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Result Display */
+        .result {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--container-bg);
+            border-radius: 10px;
+            border-left: 4px solid var(--accent-glow);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.3);
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .result h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent-glow);
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            text-shadow: 0 0 8px rgba(0, 255, 204, 0.4);
+        }
+
+        .player-info {
+            color: var(--text-light);
+        }
+
+        .player-info p {
+            margin: 8px 0;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 2px solid rgba(0, 255, 204, 0.2);
+        }
+
+        .player-info strong {
+            color: var(--accent-glow);
+            font-weight: 700;
+            min-width: 80px;
+            text-transform: uppercase;
+        }
+
+        /* Error Message */
+        .error {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 77, 77, 0.2);
+            border-left: 4px solid var(--error-color);
+            border-radius: 10px;
+            color: var(--error-color);
+            box-shadow: 0 0 15px rgba(255, 77, 77, 0.4);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        .error.active {
+            display: block;
+        }
+
+        /* Note */
+        .note {
+            margin-top: 25px;
+            padding: 15px;
+            background: rgba(255, 204, 0, 0.2);
+            border-left: 4px solid var(--warning-color);
+            border-radius: 10px;
+            font-size: 0.85em;
+            color: var(--warning-color);
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.2);
+        }
+
+        .note code {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 3px 6px;
+            border-radius: 4px;
+            color: var(--accent-glow);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .search-btn {
+                font-size: 1em;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particle-container"></div> <div class="container">
+        <div class="header">
+            <h1>🔥 FREE FIRE DATABASE 🔥</h1>
+            <p>Access vital intel: Player Nickname, Level & Region</p>
+        </div>
+
+        <form id="searchForm">
+            <div class="input-group">
+                <label for="server">Server Region:</label>
+                <select id="server" name="server">
+                    <option value="IND">India (IND)</option>
+                    <option value="BR">Brazil (BR)</option>
+                    <option value="US">United States (US)</option>
+                    <option value="SG">Singapore (SG)</option>
+                    <option value="TH">Thailand (TH)</option>
+                    <option value="VN">Vietnam (VN)</option>
+                    <option value="ID">Indonesia (ID)</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="uid">Player UID:</label>
+                <input type="text" id="uid" name="uid" placeholder="Enter player UID (e.g., 1633864660)" required>
+            </div>
+
+            <button type="submit" class="search-btn" id="searchBtn">Retrieve Intel</button>
+        </form>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 10px; color: var(--text-subtle);">Scanning player data...</p>
+        </div>
+
+        <div class="error" id="error"></div>
+
+        <div class="result" id="result">
+            <h3>PLAYER PROFILE</h3>
+            <div class="player-info" id="playerInfo"></div>
+        </div>
+
+        <div class="note">
+            <strong>This Site is Created and Maintained by King Cobra Double 💎 Topups.</strong>
+        </div>
+    </div>
+
+  <script>
+    const form = document.getElementById('searchForm');
+    const loading = document.getElementById('loading');
+    const result = document.getElementById('result');
+    const error = document.getElementById('error');
+    const playerInfo = document.getElementById('playerInfo');
+    const searchBtn = document.getElementById('searchBtn');
+    const particleContainer = document.querySelector('.particle-container');
+
+    // Function to create glowing particles
+    function createParticle() {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        const size = Math.random() * 5 + 2; // Size between 2px and 7px
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.animationDuration = `${Math.random() * 3 + 4}s`; // Duration 4s-7s
+        particle.style.animationDelay = `${Math.random() * 2}s`; // Random delay
+        particleContainer.appendChild(particle);
+
+        // Remove particle after animation ends to prevent memory leak
+        particle.addEventListener('animationend', () => {
+            particle.remove();
+        });
+    }
+
+    // Generate a few particles initially and then continuously
+    for (let i = 0; i < 20; i++) {
+        createParticle();
+    }
+    setInterval(createParticle, 500); // Create a new particle every 0.5 seconds
+
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const server = document.getElementById('server').value;
+        const uid = document.getElementById('uid').value.trim();
+
+        if (!uid) {
+            showError('Please enter a valid UID');
+            return;
+        }
+
+        // Hide previous results and errors
+        result.classList.remove('active');
+        error.classList.remove('active');
+        
+        // Show loading spinner
+        loading.classList.add('active');
+        searchBtn.disabled = true;
+
+        try {
+            const apiUrl = `https://freefire-api-six.vercel.app/get_player_personal_show?server=${server.toLowerCase()}&uid=${uid}`;
+            
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+
+            loading.classList.remove('active');
+            searchBtn.disabled = false;
+
+            if (response.ok && data) {
+                displayPlayerInfo(data);
+            } else {
+                showError(data.error || 'Player not found or invalid UID');
+            }
+        } catch (err) {
+            loading.classList.remove('active');
+            searchBtn.disabled = false;
+            showError('Failed to fetch player data. Please check your connection and try again.');
+            console.error('Error:', err);
+        }
+    });
+
+    function displayPlayerInfo(data) {
+        let html = '';
+        
+        // --- Basic Info ---
+        if (data.basicinfo) {
+            const info = data.basicinfo;
+            // Only Nickname, Level, Region
+            html += `<p><strong>Nickname:</strong> <span>${escapeHtml(info.nickname)}</span></p>`;
+            html += `<p><strong>Level:</strong> <span>${info.level}</span></p>`;
+            html += `<p><strong>Region:</strong> <span>${info.region}</span></p>`;
+            // Add Signature from socialinfo, if available
+            if (data.socialinfo && data.socialinfo.signature) {
+                html += `<p><strong>Signature:</strong> <span>${escapeHtml(data.socialinfo.signature)}</span></p>`;
+            } else if (info.signature) { // Fallback to basicinfo.signature if socialinfo.signature isn't present
+                 html += `<p><strong>Signature:</strong> <span>${escapeHtml(info.signature)}</span></p>`;
+            }
+        } else {
+            // Fallback for different response structure or missing basicinfo
+            html += `<p><strong>UID:</strong> <span>${document.getElementById('uid').value}</span></p>`;
+            html += `<p>Data found, but specific player info not available.</p>`;
+            html += `<pre style="background: rgba(0,0,0,0.4); padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.8em; margin-top: 15px;">${JSON.stringify(data, null, 2)}</pre>`;
+        }
+
+        playerInfo.innerHTML = html;
+        result.classList.add('active');
+    }
+
+    function showError(message) {
+        error.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`; /* Optional: add an icon if you link Font Awesome */
+        error.classList.add('active');
+    }
+
+    function escapeHtml(text) {
+        if (typeof text !== 'string') return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+</script>
+</body>
+</html>
