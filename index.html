@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Fire Player Lookup</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <title>Free Fire Player Checker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
     <style>
         /* Base styles */
         * {
@@ -14,20 +16,21 @@
         }
 
         :root {
-            --bg-dark: #120A2F; /* Deep violet-blue */
-            --accent-glow: #00ffcc; /* Bright cyan */
+            --bg-dark: #120A2F;
+            --accent-glow: #00ffcc;
             --text-light: #e0e0e0;
             --text-subtle: #888;
-            --container-bg: rgba(25, 10, 50, 0.8); /* Semi-transparent dark violet */
+            --container-bg: rgba(25, 10, 50, 0.8);
             --border-glow: rgba(0, 255, 204, 0.4);
             --button-gradient-start: #00e6b8;
             --button-gradient-end: #00a880;
             --error-color: #ff4d4d;
             --warning-color: #ffcc00;
+            --success-color: #00ff88;
         }
 
         body {
-            font-family: 'Share Tech Mono', monospace; /* Techy monospace font */
+            font-family: 'Share Tech Mono', monospace;
             background-color: var(--bg-dark);
             min-height: 100vh;
             display: flex;
@@ -35,12 +38,13 @@
             align-items: center;
             padding: 20px;
             color: var(--text-light);
-            overflow: hidden; /* Hide scrollbars due to moving background */
+            overflow: hidden;
             position: relative;
         }
 
         /* Animated Background Elements */
-        body::before, body::after {
+        body::before,
+        body::after {
             content: '';
             position: fixed;
             top: 0;
@@ -48,10 +52,9 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: -1; /* Behind content */
+            z-index: -1;
         }
 
-        /* Far background - grid */
         body::before {
             background-image:
                 linear-gradient(to right, rgba(0, 255, 204, 0.05) 1px, transparent 1px),
@@ -60,17 +63,21 @@
             animation: panBackground 60s linear infinite;
         }
 
-        /* Close background - particles/stars */
         body::after {
             background-image: radial-gradient(circle, var(--accent-glow) 1px, transparent 1px);
-            background-size: 800px 800px; /* Larger to create sparse 'stars' */
-            animation: panBackground 120s linear infinite reverse; /* Slower, reverse direction */
+            background-size: 800px 800px;
+            animation: panBackground 120s linear infinite reverse;
             opacity: 0.1;
         }
 
         @keyframes panBackground {
-            0% { background-position: 0 0; }
-            100% { background-position: -5000px 0; } /* Adjust to create long pan */
+            0% {
+                background-position: 0 0;
+            }
+
+            100% {
+                background-position: -5000px 0;
+            }
         }
 
         /* Foreground Glowing Particles */
@@ -81,7 +88,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 10; /* Above content */
+            z-index: 10;
             overflow: hidden;
         }
 
@@ -95,10 +102,23 @@
         }
 
         @keyframes floatAndFade {
-            0% { transform: translate(-50%, 0%); opacity: 0; }
-            20% { opacity: 0.6; }
-            80% { opacity: 0; }
-            100% { transform: translate(-50%, -1000px); opacity: 0; }
+            0% {
+                transform: translate(-50%, 0%);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 0.6;
+            }
+
+            80% {
+                opacity: 0;
+            }
+
+            100% {
+                transform: translate(-50%, -1000px);
+                opacity: 0;
+            }
         }
 
         /* Main Container */
@@ -107,18 +127,25 @@
             border-radius: 15px;
             box-shadow: 0 0 50px rgba(0, 255, 204, 0.3);
             padding: 30px;
-            max-width: 450px;
+            max-width: 550px;
             width: 100%;
             position: relative;
-            z-index: 20; /* Above background and foreground particles */
+            z-index: 20;
             border: 1px solid rgba(0, 255, 204, 0.2);
-            backdrop-filter: blur(8px); /* Frosted glass effect */
+            backdrop-filter: blur(8px);
             animation: fadeIn 0.8s ease-out;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Header */
@@ -129,7 +156,7 @@
         }
 
         .header h1 {
-            font-family: 'Orbitron', sans-serif; /* Futuristic bold font */
+            font-family: 'Orbitron', sans-serif;
             color: var(--accent-glow);
             font-size: 2.2em;
             margin-bottom: 8px;
@@ -158,7 +185,7 @@
             letter-spacing: 0.5px;
         }
 
-        select, input {
+        input {
             width: 100%;
             padding: 12px 15px;
             border: 1px solid rgba(0, 255, 204, 0.3);
@@ -172,10 +199,22 @@
             box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
         }
 
-        select:focus, input:focus {
+        input:focus {
             border-color: var(--accent-glow);
             box-shadow: 0 0 15px rgba(0, 255, 204, 0.6), inset 0 0 5px rgba(0, 255, 204, 0.3);
             background: rgba(0, 0, 0, 0.6);
+        }
+
+        .server-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            border-radius: 8px;
+            font-size: 1em;
+            outline: none;
+            background: rgba(0, 0, 0, 0.4);
+            color: var(--text-light);
+            font-family: 'Share Tech Mono', monospace;
         }
 
         /* Button */
@@ -183,7 +222,7 @@
             width: 100%;
             padding: 14px;
             background: linear-gradient(135deg, var(--button-gradient-start) 0%, var(--button-gradient-end) 100%);
-            color: #1a1a1a; /* Dark text on bright button */
+            color: #1a1a1a;
             border: none;
             border-radius: 8px;
             font-size: 1.1em;
@@ -241,14 +280,57 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Ban Status Display */
+        .ban-status {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: 700;
+            animation: slideInUp 0.6s ease-out;
+            border: 2px solid;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .ban-status.active {
+            display: block;
+        }
+
+        .ban-status.not-banned {
+            background: rgba(0, 255, 136, 0.15);
+            border-color: var(--success-color);
+            color: var(--success-color);
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.3);
+        }
+
+        .ban-status.banned {
+            background: rgba(255, 77, 77, 0.15);
+            border-color: var(--error-color);
+            color: var(--error-color);
+            box-shadow: 0 0 25px rgba(255, 77, 77, 0.3);
+        }
+
+        .ban-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px currentColor;
         }
 
         /* Result Display */
         .result {
             display: none;
-            margin-top: 30px;
+            margin-top: 25px;
             padding: 20px;
             background: var(--container-bg);
             border-radius: 10px;
@@ -258,8 +340,15 @@
         }
 
         @keyframes slideInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .result.active {
@@ -272,6 +361,8 @@
             margin-bottom: 15px;
             font-size: 1.4em;
             text-shadow: 0 0 8px rgba(0, 255, 204, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .player-info {
@@ -280,7 +371,7 @@
 
         .player-info p {
             margin: 8px 0;
-            padding: 10px;
+            padding: 12px;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 5px;
             display: flex;
@@ -292,8 +383,32 @@
         .player-info strong {
             color: var(--accent-glow);
             font-weight: 700;
-            min-width: 80px;
+            min-width: 100px;
             text-transform: uppercase;
+            font-size: 0.9em;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.75em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .badge.banned {
+            background: var(--error-color);
+            color: #1a1a1a;
+            box-shadow: 0 0 10px var(--error-color);
+        }
+
+        .badge.safe {
+            background: var(--success-color);
+            color: #1a1a1a;
+            box-shadow: 0 0 10px var(--success-color);
         }
 
         /* Error Message */
@@ -310,9 +425,21 @@
         }
 
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-5px); }
-            40%, 80% { transform: translateX(5px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            20%,
+            60% {
+                transform: translateX(-5px);
+            }
+
+            40%,
+            80% {
+                transform: translateX(5px);
+            }
         }
 
         .error.active {
@@ -323,18 +450,15 @@
         .note {
             margin-top: 25px;
             padding: 15px;
-            background: rgba(255, 204, 0, 0.2);
-            border-left: 4px solid var(--warning-color);
+            background: rgba(0, 255, 204, 0.1);
+            border-left: 4px solid var(--accent-glow);
             border-radius: 10px;
             font-size: 0.85em;
-            color: var(--warning-color);
-            box-shadow: 0 0 15px rgba(255, 204, 0, 0.2);
+            color: var(--text-subtle);
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
         }
 
-        .note code {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 3px 6px;
-            border-radius: 4px;
+        .note strong {
             color: var(--accent-glow);
         }
 
@@ -343,9 +467,11 @@
             .container {
                 padding: 25px;
             }
+
             .header h1 {
                 font-size: 1.8em;
             }
+
             .search-btn {
                 font-size: 1em;
                 padding: 12px;
@@ -353,41 +479,50 @@
         }
     </style>
 </head>
+
 <body>
-    <div class="particle-container"></div> <div class="container">
+    <div class="particle-container"></div>
+
+    <div class="container">
         <div class="header">
-            <h1>🔥 FREE FIRE DATABASE 🔥</h1>
-            <p>Access vital intel: Player Nickname, Level & Region</p>
+            <h1>🔥 FREE FIRE INTEL 🔥</h1>
+            <p>Player Status Scanner | Ban Detection System</p>
         </div>
 
         <form id="searchForm">
-            <div class="input-group">
-                <label for="server">Server Region:</label>
-                <select id="server" name="server">
-                    <option value="IND">India (IND)</option>
-                    <option value="BR">Brazil (BR)</option>
-                    <option value="US">United States (US)</option>
-                    <option value="SG">Singapore (SG)</option>
-                    <option value="TH">Thailand (TH)</option>
-                    <option value="VN">Vietnam (VN)</option>
-                    <option value="ID">Indonesia (ID)</option>
-                </select>
-            </div>
 
             <div class="input-group">
                 <label for="uid">Player UID:</label>
                 <input type="text" id="uid" name="uid" placeholder="Enter player UID (e.g., 1633864660)" required>
             </div>
 
-            <button type="submit" class="search-btn" id="searchBtn">Retrieve Intel</button>
+            <div class="input-group">
+                <label for="server">Server Region:</label>
+                <select id="server" name="server" class="server-select" required>
+                    <option value="ind">India (IN)</option>
+                    <option value="id">Indonesia (ID)</option>
+                    <option value="br">Brazil (BR)</option>
+                    <option value="us">North America (NA)</option>
+                    <option value="sg">Singapore (SG)</option>
+                    <option value="eu">Europe (EU)</option>
+                    <option value="th">Thailand (TH)</option>
+                    <option value="vn">Vietnam (VN)</option>
+                    <option value="tw">Taiwan (TW)</option>
+                    <option value="mena">Middle East (MENA)</option>
+                </select>
+            </div>
+
+            <button type="submit" class="search-btn" id="searchBtn">Scan Player Status</button>
         </form>
 
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p style="margin-top: 10px; color: var(--text-subtle);">Scanning player data...</p>
+            <p style="margin-top: 10px; color: var(--text-subtle);">Analyzing player data...</p>
         </div>
 
         <div class="error" id="error"></div>
+
+        <div class="ban-status" id="banStatus"></div>
 
         <div class="result" id="result">
             <h3>PLAYER PROFILE</h3>
@@ -395,123 +530,168 @@
         </div>
 
         <div class="note">
-            <strong>This Site is Created and Maintained by King Cobra Double 💎 Topups.</strong>
+            <strong>System Info:</strong> Connected to Garena's official anti-hack API for real-time ban status
+            verification.
         </div>
     </div>
+    <script>
+        // --- DOM Element References ---
+        const form = document.getElementById('searchForm');
+        const loading = document.getElementById('loading');
+        const result = document.getElementById('result');
+        const error = document.getElementById('error');
+        const banStatus = document.getElementById('banStatus');
+        const playerInfo = document.getElementById('playerInfo');
+        const searchBtn = document.getElementById('searchBtn');
+        const particleContainer = document.querySelector('.particle-container');
 
-  <script>
-    const form = document.getElementById('searchForm');
-    const loading = document.getElementById('loading');
-    const result = document.getElementById('result');
-    const error = document.getElementById('error');
-    const playerInfo = document.getElementById('playerInfo');
-    const searchBtn = document.getElementById('searchBtn');
-    const particleContainer = document.querySelector('.particle-container');
+        // --- Particle Effect Logic ---
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            const size = Math.random() * 5 + 2;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.animationDuration = `${Math.random() * 3 + 4}s`;
+            particle.style.animationDelay = `${Math.random() * 2}s`;
+            particleContainer.appendChild(particle);
+            particle.addEventListener('animationend', () => particle.remove());
+        }
+        // Create initial particles and then add more over time
+        for (let i = 0; i < 20; i++) {
+            createParticle();
+        }
+        setInterval(createParticle, 500);
 
-    // Function to create glowing particles
-    function createParticle() {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-        const size = Math.random() * 5 + 2; // Size between 2px and 7px
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        particle.style.left = `${Math.random() * 100}%`;
-        particle.style.animationDuration = `${Math.random() * 3 + 4}s`; // Duration 4s-7s
-        particle.style.animationDelay = `${Math.random() * 2}s`; // Random delay
-        particleContainer.appendChild(particle);
+        // --- Main Form Submission Logic ---
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent the form from reloading the page
 
-        // Remove particle after animation ends to prevent memory leak
-        particle.addEventListener('animationend', () => {
-            particle.remove();
+            // Get values from both the UID input and the server dropdown
+            const uid = document.getElementById('uid').value.trim();
+            const server = document.getElementById('server').value;
+
+            if (!uid) {
+                showError('Please enter a valid UID');
+                return;
+            }
+
+            // Reset the UI to a loading state
+            result.classList.remove('active');
+            banStatus.classList.remove('active');
+            error.classList.remove('active');
+            loading.classList.add('active');
+            searchBtn.disabled = true;
+
+            try {
+                // Define the URLs for both your servers using the user's input
+                const playerDetailsUrl = `https://freefire-api-six.vercel.app/get_player_personal_show?server=${server.toLowerCase()}&uid=${uid}`;
+                const banCheckUrl = `http://localhost:3000/check-ban?uid=${uid}`;
+
+                // Use Promise.all to fetch data from both APIs at the same time for better performance
+                const [detailsResponse, banResponse] = await Promise.all([
+                    fetch(playerDetailsUrl),
+                    fetch(banCheckUrl)
+                ]);
+
+                // Check if either of the API calls failed
+                if (!detailsResponse.ok) {
+                    const errorData = await detailsResponse.json();
+                    throw new Error(errorData.message || 'Player not found on the selected server.');
+                }
+                if (!banResponse.ok) {
+                    throw new Error('Ban check server is not responding.');
+                }
+
+                // Parse the JSON data from both responses
+                const detailsData = await detailsResponse.json();
+                const banData = await banResponse.json();
+
+                // Merge the two data objects into a single object
+                const combinedData = { ...detailsData, ...banData };
+
+                // Check the status from the ban server to ensure it was successful
+                if (banData.status === 'success') {
+                    displayPlayerData(combinedData);
+                } else {
+                    showError(combinedData.message || 'An unknown error occurred.');
+                }
+
+            } catch (err) {
+                // If any part of the process fails, display an error message
+                showError(err.message);
+                console.error('Error:', err);
+            } finally {
+                // This 'finally' block always runs, whether the request succeeded or failed
+                loading.classList.remove('active');
+                searchBtn.disabled = false;
+            }
         });
-    }
 
-    // Generate a few particles initially and then continuously
-    for (let i = 0; i < 20; i++) {
-        createParticle();
-    }
-    setInterval(createParticle, 500); // Create a new particle every 0.5 seconds
+        // --- Display Function ---
+        function displayPlayerData(data) {
+            const isBanned = data.is_banned;
+            const banPeriod = data.ban_period;
 
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const server = document.getElementById('server').value;
-        const uid = document.getElementById('uid').value.trim();
-
-        if (!uid) {
-            showError('Please enter a valid UID');
-            return;
-        }
-
-        // Hide previous results and errors
-        result.classList.remove('active');
-        error.classList.remove('active');
-        
-        // Show loading spinner
-        loading.classList.add('active');
-        searchBtn.disabled = true;
-
-        try {
-            const apiUrl = `https://freefire-api-six.vercel.app/get_player_personal_show?server=${server.toLowerCase()}&uid=${uid}`;
-            
-            const response = await fetch(apiUrl);
-            const data = await response.json();
-
-            loading.classList.remove('active');
-            searchBtn.disabled = false;
-
-            if (response.ok && data) {
-                displayPlayerInfo(data);
+            // Display the main ban status banner
+            if (isBanned) {
+                banStatus.className = 'ban-status banned active';
+                banStatus.innerHTML = `
+                <div class="ban-icon">🚫</div>
+                <div>ACCOUNT BANNED</div>
+                ${banPeriod ? `<div style="font-size: 0.8em; margin-top: 10px; font-weight: 400;">Ban Duration: ${banPeriod} month(s)</div>` : ''}
+            `;
             } else {
-                showError(data.error || 'Player not found or invalid UID');
+                banStatus.className = 'ban-status not-banned active';
+                banStatus.innerHTML = `
+                <div class="ban-icon">✓</div>
+                <div>ACCOUNT VERIFIED</div>
+                <div style="font-size: 0.8em; margin-top: 10px; font-weight: 400;">No violations detected</div>
+            `;
             }
-        } catch (err) {
-            loading.classList.remove('active');
-            searchBtn.disabled = false;
-            showError('Failed to fetch player data. Please check your connection and try again.');
-            console.error('Error:', err);
-        }
-    });
 
-    function displayPlayerInfo(data) {
-        let html = '';
-        
-        // --- Basic Info ---
-        if (data.basicinfo) {
-            const info = data.basicinfo;
-            // Only Nickname, Level, Region
-            html += `<p><strong>Nickname:</strong> <span>${escapeHtml(info.nickname)}</span></p>`;
-            html += `<p><strong>Level:</strong> <span>${info.level}</span></p>`;
-            html += `<p><strong>Region:</strong> <span>${info.region}</span></p>`;
-            // Add Signature from socialinfo, if available
-            if (data.socialinfo && data.socialinfo.signature) {
-                html += `<p><strong>Signature:</strong> <span>${escapeHtml(data.socialinfo.signature)}</span></p>`;
-            } else if (info.signature) { // Fallback to basicinfo.signature if socialinfo.signature isn't present
-                 html += `<p><strong>Signature:</strong> <span>${escapeHtml(info.signature)}</span></p>`;
+            // Build and display the detailed player profile information
+            let html = '';
+
+            // Safely check if each piece of data exists before adding it to the display
+            if (data.nickname) {
+                html += `<p><strong>Nickname:</strong> <span>${escapeHtml(data.nickname)} ${isBanned ? '<span class="badge banned">BANNED</span>' : '<span class="badge safe">ACTIVE</span>'}</span></p>`;
             }
-        } else {
-            // Fallback for different response structure or missing basicinfo
-            html += `<p><strong>UID:</strong> <span>${document.getElementById('uid').value}</span></p>`;
-            html += `<p>Data found, but specific player info not available.</p>`;
-            html += `<pre style="background: rgba(0,0,0,0.4); padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.8em; margin-top: 15px;">${JSON.stringify(data, null, 2)}</pre>`;
+            if (data.uid) {
+                html += `<p><strong>UID:</strong> <span>${escapeHtml(data.uid)}</span></p>`;
+            }
+            if (data.server) {
+                html += `<p><strong>Server:</strong> <span>${escapeHtml(data.server)}</span></p>`;
+            }
+            if (data.level) {
+                html += `<p><strong>Level:</strong> <span>${data.level}</span></p>`;
+            }
+            if (data.signature) {
+                html += `<p><strong>Signature:</strong> <span>${escapeHtml(data.signature)}</span></p>`;
+            }
+            if (isBanned && banPeriod) {
+                html += `<p><strong>Ban Duration:</strong> <span style="color: var(--error-color);">${banPeriod} month(s)</span></p>`;
+            }
+
+            playerInfo.innerHTML = html;
+            result.classList.add('active');
         }
 
-        playerInfo.innerHTML = html;
-        result.classList.add('active');
-    }
+        // --- Helper Functions ---
+        function showError(message) {
+            error.innerHTML = `⚠ ${message}`;
+            error.classList.add('active');
+        }
 
-    function showError(message) {
-        error.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`; /* Optional: add an icon if you link Font Awesome */
-        error.classList.add('active');
-    }
-
-    function escapeHtml(text) {
-        if (typeof text !== 'string') return '';
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-</script>
+        // A simple function to prevent HTML injection security issues
+        function escapeHtml(text) {
+            if (typeof text !== 'string') return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
 </body>
+
 </html>
